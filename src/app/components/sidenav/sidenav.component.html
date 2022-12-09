@@ -1,0 +1,24 @@
+<div (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()" [class.collapsed]="collapsed"
+  [class.open]="collapsed && collapsedOpen$ | async" class="sidenav sidenav-background flex flex-col">
+  <div class="sidenav-toolbar flex-none flex items-center">
+    <img [src]="imageUrl$ | async" class="w-25 select-none flex-none">
+    <h2 class="red-title title select-none flex-auto text-center pb-3"></h2>
+    <button (click)="toggleCollapse()" *ngIf="showCollapsePin$ | async"
+      class="w-4 h-4 -mr-5 leading-none flex-none hidden lg:block" mat-icon-button type="button">
+      <mat-icon *ngIf="!collapsed" [icIcon]="icRadioButtonChecked" size="14px"></mat-icon>
+      <mat-icon *ngIf="collapsed" [icIcon]="icRadioButtonUnchecked" size="14px"></mat-icon>
+    </button>
+  </div>
+
+  <vex-scrollbar class="flex-auto">
+    <div class="sidenav-items">
+      <ng-container *ngIf="usuario$ | async">
+
+        <h2 class="red-title title ltr:pl-4 rtl:pr-4 select-none flex-auto text-center subheading pb-3">{{ title$ |
+          async }}</h2>
+        <app-sidenav-item *ngFor="let item of items; trackBy: trackByRoute" [item]="item" [level]="0">
+        </app-sidenav-item>
+      </ng-container>
+    </div>
+  </vex-scrollbar>
+</div>

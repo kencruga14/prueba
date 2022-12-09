@@ -1,0 +1,45 @@
+<div *ngIf="config$ | async as setting" class="config-panel">
+  <h2 class="headline mb-4">
+    <ic-icon [icon]="icSettings" class="mr-3" inline="true"></ic-icon>
+    <span>Visualización</span>
+  </h2>
+
+  <div class="section">
+    <h5 class="subheading">Modo</h5>
+    <div (click)="selectedStyle === Style.dark ? disableDarkMode() : enableDarkMode()"
+        *ngIf="selectedStyle$ | async as selectedStyle"
+        class="rounded-full mt-2 flex items-center cursor-pointer relative bg-contrast-black text-contrast-white"
+        matRipple>
+      <div class="m-2 h-6 w-6 rounded-full">
+        <ic-icon *ngIf="selectedStyle === Style.dark" [icon]="icCheck" size="24px"></ic-icon>
+        <ic-icon *ngIf="selectedStyle !== Style.dark" [icon]="icClose" size="24px"></ic-icon>
+      </div>
+      <p class="ml-1 font-medium text-sm">Oscuro</p>
+    </div>
+  </div>
+  
+  <div class="section" *ngIf="local">
+    <h5 class="subheading">Pruebas</h5>
+    <form #testForm="ngForm" novalidate>
+      <div fxLayout="column" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0">
+        <mat-form-field fxFlex="auto">
+          <mat-label>Entorno</mat-label>
+          <mat-select [(ngModel)]="selector" required name="selectable"> 
+              <mat-option *ngFor="let op of options" [value]="op">
+                  {{op}}
+              </mat-option>
+          </mat-select>
+          <mat-error *ngIf="selector===''">Por elija un entorno</mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="auto">
+        <mat-label>Valor</mat-label>
+        <input matInput [(ngModel)]="query" name="valor" required #valor="ngModel">
+        <mat-error *ngIf="valor.invalid">Por favor escriba algún valor</mat-error>
+      </mat-form-field>
+      </div>
+      <div fxLayout="column" fxLayoutGap="8px">
+        <button color="primary" [disabled]="!testForm.valid" mat-raised-button type="submit">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>

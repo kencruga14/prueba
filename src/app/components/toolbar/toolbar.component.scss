@@ -1,0 +1,41 @@
+:host {
+  background: var(--toolbar-background);
+  box-sizing: border-box;
+  color: var(--toolbar-color);
+  display: block;
+  white-space: nowrap;
+  width: 100%;
+  z-index: var(--toolbar-z-index);
+}
+
+.toolbar {
+  height: var(--toolbar-height);
+}
+
+.mat-icon {
+  color: var(--toolbar-icon-color);
+}
+
+a {
+  color: var(--toolbar-color);
+  text-decoration: none;
+}
+
+.image-brand {
+  width: 27%;
+  height: auto;
+}
+
+@media (max-width: 960px) {
+  .image-brand {
+    width: 65%;
+    height: auto;
+  }
+}
+
+@media (min-width: 960px) {
+  .menuButton {
+    display: none;
+  }
+}
+

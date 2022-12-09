@@ -1,0 +1,283 @@
+<p-toolbar>
+  <p>{{ titulo }}</p>
+</p-toolbar>
+<p-table
+  class="table"
+  #buscar
+  [value]="instrumentoCoopList"
+  dataKey="id"
+  [rows]="5"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[5, 10, 25, 50]"
+  [loading]="loading"
+  [paginator]="true"
+  responsiveLayout="scroll"
+  currentPageReportTemplate="{first} a {last} de {totalRecords} Instrumentos de Cooperación"
+  [globalFilterFields]="['nombre', 'urlDoc', 'estado']"
+  styleClass="p-datatable-customers p-datatable-gridlines"
+>
+  <ng-template pTemplate="caption">
+    <div class="tituloTabla">
+      <div class="p-d-flex">
+        <span class="p-input-icon-left p-ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="buscar.filterGlobal($event.target.value, 'contains')"
+            placeholder="Buscar..."
+          />
+        </span>
+      </div>
+      <button
+        type="button"
+        pButton
+        pRipple
+        label="Nuevo"
+        icon="pi pi-plus"
+        class="button"
+        (click)="abrirNuevo()"
+      ></button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="nombre">
+        Nombre <p-sortIcon field="nombre"></p-sortIcon>
+      </th>
+      <th pSortableColumn="urlDoc">
+        Url documento<p-sortIcon field="urlDocum"></p-sortIcon>
+      </th>
+      <th pSortableColumn="estado">
+        Estado<p-sortIcon field="estado"></p-sortIcon>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-instrumentoCoopList>
+    <tr>
+      <td>{{ instrumentoCoopList.nombre }}</td>
+      <td>{{ instrumentoCoopList.urlDoc }}</td>
+      <td>{{ instrumentoCoopList.estado }}</td>
+      <td class="acciones">
+        <button
+          mat-mini-fab
+          title="Editar"
+          class="buttonEditar"
+          (click)="rellenarCamposInstrumentoCoop(instrumentoCoopList)"
+        >
+          <fa-icon
+            class="fa-lg"
+            [icon]="utilidadesService.iconofaPen"
+          ></fa-icon>
+        </button>
+        <button
+          class="buttonHabilitar"
+          title="Habilitar o Deshabilitar "
+          mat-mini-fab
+          (click)="habilitarDeshabilitarInstrumentoCoop(instrumentoCoopList)"
+        >
+          <fa-icon
+            *ngIf="
+              instrumentoCoopList.estado == utilidadesService.ESTADO_HABILITADO
+            "
+            class="facheck fa-lg"
+            [icon]="utilidadesService.iconofaCheck"
+          ></fa-icon>
+          <fa-icon
+            *ngIf="
+              instrumentoCoopList.estado ==
+              utilidadesService.ESTADO_DESHABILITADO
+            "
+            class="lock fa-lg"
+            [icon]="utilidadesService.iconolock"
+          ></fa-icon>
+        </button>
+
+        <button
+          title="Descargar"
+          mat-mini-fab
+          class="buttonDescargar"
+          (click)="descargar(instrumentoCoopList.urlDoc)"
+        >
+          <fa-icon
+            class="fa-lg"
+            [icon]="utilidadesService.iconoDownload"
+          ></fa-icon>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [(visible)]="instrumentoCoopDialog"
+  [style]="{ width: '600px', height: '600px' }"
+  header="{{ tituloDialog }} "
+  [modal]="true"
+  styleClass="p-fluid"
+  [closable]="false"
+>
+  <ng-template pTemplate="content">
+    <form [formGroup]="crearInstrumentoCoopForm">
+      <div class="p-grid p-fluid">
+        <h6 class="alineacion">
+          Nombre {{ this.utilidadesService.CAMPO_OBLIGATORIO }}
+        </h6>
+        <input
+          formControlName="nombre"
+          type="text"
+          pInputText
+          placeholder=""
+          required
+          style="text-transform: uppercase"
+          value=""
+          onkeyup="javascript:this.value=this.value.toUpperCase();"
+          oninput="this.value = this.value.replace(/[^a-zA-Z0-9 ]/,'')"
+        />
+
+        <div
+          *ngIf="
+            crearInstrumentoCoopForm.get('nombre').errors &&
+            crearInstrumentoCoopForm.get('nombre').dirty
+          "
+        >
+          <small
+            class="alineacion"
+            *ngIf="crearInstrumentoCoopForm.get('nombre')?.hasError('required')"
+            >El nombre es requerido.</small
+          >
+          <small
+            class="alineacion"
+            *ngIf="
+              crearInstrumentoCoopForm.get('nombre')?.hasError('minlength')
+            "
+            >El nombre debe tener min 3 carácteres.</small
+          >
+
+          <small
+            class="alineacion"
+            *ngIf="
+              crearInstrumentoCoopForm.get('nombre')?.hasError('maxlength')
+            "
+            >El nombre debe tener max 256 carácteres.</small
+          >
+        </div>
+      </div>
+      <br />
+      <div class="p-grid p-fluid">
+        <h6 class="alineacion">
+          Estado {{ this.utilidadesService.CAMPO_OBLIGATORIO }}
+        </h6>
+        <p-dropdown
+          [options]="opcionesEstado"
+          placeholder="Seleccione un estado"
+          [showClear]="true"
+          optionLabel="nombre"
+          formControlName="estado"
+          required
+        ></p-dropdown>
+        <div
+          *ngIf="
+            crearInstrumentoCoopForm.get('estado').errors &&
+            crearInstrumentoCoopForm.get('estado').dirty
+          "
+        >
+          <small
+            class="alineacion"
+            *ngIf="crearInstrumentoCoopForm.get('estado')?.hasError('required')"
+            >El estado es requerido.</small
+          >
+        </div>
+      </div>
+      <div *ngIf="activarCheck" class="checkActualizarArchivo">
+        <mat-checkbox formControlName="checkActualizarArchivo"
+          >Actualizar archivo.</mat-checkbox
+        >
+      </div>
+    </form>
+
+    <div class="fileGroup" *ngIf="tituloDialog == 'CREAR'">
+      <div class="div_file">
+        <p class="texto">
+          <fa-icon
+            class="fa-lg"
+            [icon]="utilidadesService.iconoupload"
+          ></fa-icon
+          >&nbsp;&nbsp;Agregar Archivo
+          {{ this.utilidadesService.CAMPO_OBLIGATORIO }}
+        </p>
+        <input
+          class="inputFile"
+          type="file"
+          id="fileUpload"
+          name="Archivo"
+          accept="{{ '.docx' }}"
+          (change)="changeInput($event.target.files)"
+        />
+      </div>
+      <div class="archivoSeleccionado">
+        <small class="nombre">{{ archivoSeleccionado }}</small>
+      </div>
+    </div>
+
+    <div
+      class="fileGroup"
+      *ngIf="crearInstrumentoCoopForm.value.checkActualizarArchivo"
+    >
+      <div class="div_file">
+        <p class="texto">
+          <fa-icon
+            class="fa-lg"
+            [icon]="utilidadesService.iconoupload"
+          ></fa-icon
+          >&nbsp;&nbsp;Agregar Archivo
+          {{ this.utilidadesService.CAMPO_OBLIGATORIO }}
+        </p>
+        <input
+          class="inputFile"
+          type="file"
+          id="fileUpload"
+          name="Archivo"
+          accept="{{ '.docx' }}"
+          (change)="changeInput($event.target.files)"
+        />
+      </div>
+      <div class="archivoSeleccionado">
+        <small class="nombre">{{ archivoSeleccionado }}</small>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="ocultarDialogo()"
+    ></button>
+    <button
+      *ngIf="tituloDialog == 'CREAR'"
+      [disabled]="crearInstrumentoCoopForm.invalid"
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="guardarInstrumentoCoop()"
+    ></button>
+    <button
+      *ngIf="tituloDialog == 'ACTUALIZAR'"
+      [disabled]="crearInstrumentoCoopForm.invalid"
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="actualizarInstrumentoCoop()"
+    ></button>
+  </ng-template>
+</p-dialog>

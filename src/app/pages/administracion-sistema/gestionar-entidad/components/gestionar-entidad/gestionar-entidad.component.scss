@@ -1,0 +1,36 @@
+$red: red;
+$success: rgb(18, 139, 42);
+$blue: rgb(13, 162, 203);
+$plomo: rgb(208, 210, 204);
+
+@mixin alinear($flex-direction: row, $justify-content: flex-start) {
+    display: flex;
+    flex-direction: $flex-direction;
+    justify-content: $justify-content;
+}
+
+.alineacion {
+    @include alinear();
+}
+
+.table {
+    height: 100%;
+    width: 100%;
+    padding: 0.4em 1em 0.4em 1em;
+}
+
+.tituloTabla {
+    @include alinear(row, space-between);
+}
+
+.buttonEditar {
+    background-color: $blue;
+}
+.buttonHabilitar {
+    background-color: $plomo;
+    margin-left: 1em;
+}
+
+.acciones {
+    @include alinear(row, center);
+}

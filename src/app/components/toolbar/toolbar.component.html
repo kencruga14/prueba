@@ -1,0 +1,16 @@
+<div class="toolbar w-full px-gutter" fxLayout="row" fxLayoutAlign="start center" vexContainer>
+  <button (click)="openSidenav()" mat-icon-button type="button" class="menuButton">
+    <mat-icon [icIcon]="icMenu"></mat-icon>
+  </button>
+  <span fxFlex="auto">
+    <!-- <img class="w-40 image-brand" [src]="imageToolbarService.image"> -->
+  </span>
+
+  <div class="-mx-1 flex items-center">
+    <div class="px-1">
+      <app-toolbar-user></app-toolbar-user>
+    </div>
+  </div>
+</div>
+
+<vex-navigation *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async"></vex-navigation>

@@ -1,0 +1,151 @@
+@import "~simplebar/dist/simplebar.css";
+
+@import "./@vex/styles/core";
+@import "./@vex/styles/partials/styles/style-light";
+
+:root {
+  --red: #c8423a;
+  --white: #ffffff;
+  --gray: #a9afbb;
+  --green: #3e6f41;
+
+  --color-primary: 27, 104, 165;
+  --color-primary-contrast: 255, 255, 255;
+
+  --color-secondary: 108, 117, 125;
+  --color-secondary-contrast: 255, 255, 255;
+
+  --color-success: 62, 111, 65;
+  --color-success-contrast: 255, 255, 255;
+
+  --color-info: 0, 188, 212;
+  --color-info-contrast: 255, 255, 255;
+
+  --color-warning: 205, 168, 27;
+  --color-warning-contrast: 255, 255, 255;
+
+  --color-danger: 244, 67, 54;
+  --color-danger-contrast: 255, 255, 255;
+
+  --color-light: 248, 249, 250;
+  --color-light-contrast: 255, 255, 255;
+
+  --color-dark: 52, 58, 64;
+  --color-dark-contrast: 255, 255, 255;
+}
+
+.bg-snackbar {
+  background: #008080;
+  color: #ffffff;
+  .mat-simple-snackbar-action {
+    color: #ffffff;
+  }
+}
+
+.vex-style-light {
+  --sidenav-item-icon-color: var(--gray);
+  --sidenav-item-icon-color-active: var(--white);
+  --sidenav-item-background-active: var(--red);
+  --sidenav-item-color-active: var(--white);
+
+  .sidenav {
+    border: none;
+
+    vex-sidenav-item {
+      .item {
+        width: unset;
+        border-radius: 4px;
+        @apply mx-2;
+
+        &.active {
+          @apply shadow;
+        }
+      }
+
+      .item-level-0 > .item {
+        @apply my-1;
+      }
+
+      .item-level-1 .item.active {
+        @apply shadow-none font-medium;
+
+        .item-label {
+          @apply text-black;
+        }
+      }
+
+      .item-level-1 .item:hover .item-label {
+        @apply text-black;
+      }
+    }
+  }
+
+  .sidenav-collapsed .sidenav vex-sidenav-item .item {
+    @apply mx-0;
+  }
+}
+
+.text-link {
+  color: var(--blue);
+}
+.bottom-sheet-max-width {
+  min-width: 90vw !important;
+  margin-top: 80px;
+}
+
+//Estilos generales proyecto Gci
+$width: 100%;
+$height: 100%;
+$border: 5px solid #fff;
+$background: white;
+.contenedor {
+  width: $width;
+  max-width: $height;
+  margin: auto;
+  text-align: center;
+  background: white;
+  //responsive
+  display: grid;
+  grid-template-rows: minmax(2rem, auto);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  grid-auto-flow: dense;
+  justify-items: center;
+  align-items: center;
+}
+
+.contenedor > div {
+  display: block;
+  padding: 1px;
+}
+
+.contenedor .item {
+  justify-self: stretch;
+  align-self: stretch;
+  position: sticky;
+  border: $border;
+}
+
+//agrega borde al título y botones de acción
+.borde {
+  border: $border;
+  background: $background;
+}
+
+.idButtonAccion {
+  width: 60%;
+  margin-left: 1em;
+  margin: 1em;
+}
+
+//los botones son flexibles según el espacio disponible.
+.btnGroup {
+  border: $border;
+  background: $background;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+/*small {
+  color: #c8423a;
+}*/
